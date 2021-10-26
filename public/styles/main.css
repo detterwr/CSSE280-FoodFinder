@@ -1,5 +1,45 @@
 body {
     background: #DDDDDD;
+    background-color: lightblue;
+    background-image: url("https://images.squarespace-cdn.com/content/v1/5835d948414fb5a615f7641e/1481519058032-2V7L61ZFLEDNYTL2CYU7/Food+Photo+Background.jpg?format=2500w");
+    /* the image is only for prototype use, and we give full credit of it to Mesa Cafe*/
+}
+
+h1 {
+    margin-bottom: 0px;
+    font-size: 2.5em;
+    font-family: 'Lobster', cursive;
+    color: lightyellow;
+    text-align: center;
+}
+
+#topWord{
+    font-size: 2em;
+    font-family: 'Lobster', cursive;
+    color: lightyellow;
+}
+
+h5 {
+    font-family: 'Lobster', cursive;
+    color: lightyellow;
+}
+
+#fab {
+    position: fixed;
+    right: 25px;
+    bottom: 10px;
+    background: #800000;
+    color: lightyellow;
+    z-index: 999;
+}
+
+.modal-backdrop {
+    background-color: #F2A97E;
+ }
+
+#fab:active {
+    transform: translateY(2px);
+    opacity: 0.8;
 }
 
 .navbar {
@@ -7,6 +47,109 @@ body {
     color: white;
 }
 
+nav.navbar.navbar-dark.fixed-top {
+    padding-bottom: 0px;
+}
+
+.navbar.navbar-dark.bg-faded {
+    padding-bottom: 5px;
+}
+
+#topBar {
+    position: fixed;
+    /* z-index: 5; */
+}
+
+#searchcontent{
+    max-width: 50%;
+}
+
+.bmd-layout-content {
+    height: 100vh;
+}
+
+.bmd-layout-drawer {
+    position: fixed;
+}
+
+.bmd-layout-drawer>header {
+    background-color: rgb(255, 0, 179);
+    color: lightblue;
+}
+
+.bmd-layout-drawer>ul {
+    background-color: lightcoral;
+}
+
+.list-group-item :first-child {
+    margin-right: 0.67rem;
+}
+
+#menuShowRestaurants,
+#menuApplyFilters,
+#menuShowFavorites,
+#menuUserInfo,
+#menuSignOut{
+    color: darkblue;
+}
+
+#menuSignOut:hover {
+    background-color: grey;
+    color: white;
+}
+
+#menuUserInfo:hover {
+    background-color: grey;
+    color: white;
+}
+
+#menuShowRestaurants:hover {
+    background-color: grey;
+    color: white;
+}
+
+#menuApplyFilters:hover {
+    background-color: grey;
+    color: white;
+}
+
+#menuShowFavorites:hover {
+    background-color: grey;
+    color: white;
+}
+
+.dropdown-menu-right {
+    left: -128px;
+}
+
+
+input{
+    padding: 0px;
+}
+#searchBar{
+    max-width: 85%;
+    padding-top: 0px;
+}
+#searchbutton,
+#clearbutton{
+    background-color: orangered;
+    color: white;
+    margin:3px;
+}
+
 .page-container {
     margin-top: 75px;
+}
+
+.card {
+    background-color: pink;
+    margin: 10px 0;
+}
+
+#MainPage .card-title,
+#MainPage .card-subtitle {
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
 }
