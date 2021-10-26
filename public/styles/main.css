@@ -21,7 +21,7 @@ h1 {
 
 h5 {
     font-family: 'Lobster', cursive;
-    color: lightyellow;
+    /* color: lightyellow; */
 }
 
 #fab {
@@ -45,6 +45,7 @@ h5 {
 .navbar {
     background-color: #800000;
     color: white;
+
 }
 
 nav.navbar.navbar-dark.fixed-top {
@@ -62,6 +63,10 @@ nav.navbar.navbar-dark.fixed-top {
 
 #searchcontent{
     max-width: 50%;
+}
+
+#optionsDiv{
+    max-width: 50%; 
 }
 
 .bmd-layout-content {
@@ -93,26 +98,12 @@ nav.navbar.navbar-dark.fixed-top {
     color: darkblue;
 }
 
-#menuSignOut:hover {
-    background-color: grey;
-    color: white;
-}
-
-#menuUserInfo:hover {
-    background-color: grey;
-    color: white;
-}
-
-#menuShowRestaurants:hover {
-    background-color: grey;
-    color: white;
-}
-
-#menuApplyFilters:hover {
-    background-color: grey;
-    color: white;
-}
-
+#menuSignOut:hover,
+#menuEdit:hover,
+#menuDelete:hover,
+#menuUserInfo:hover,
+#menuShowRestaurants:hover,
+#menuApplyFilters:hover,
 #menuShowFavorites:hover {
     background-color: grey;
     color: white;
@@ -152,4 +143,14 @@ input{
     overflow: hidden;
     display: block;
     text-overflow: ellipsis;
+}
+
+#roseFireButton{
+    display: block;
+    margin: 60px, auto; 
+    color: white;
+    background: #800000;
+    font-size: 1.1em;
+    padding: 10px 30px; 
+    border-radius: 5px;
 }
