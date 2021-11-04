@@ -166,9 +166,9 @@ rhit.FbRestaurantsManager = class {
 	beginListening(changeListener) {
 		//let query = this._ref.orderBy(rhit.FB_KEY_LAST_TOUCHED, "desc").limit(50);
 		let query = this._ref;
-		// if (this._uid) {
-		// 		query = query.where(rhit.FB_KEY_AUTHOR, "==", this._uid);
-		// }
+	 	if (this._uid) {
+			query = query.where(rhit.FB_KEY_AUTHOR, "==", this._uid);
+		 }
 		this._unsubscribe = query.onSnapshot((querySnapshot) => {
 				console.log("Restaurant update!");
 				this._documentSnapshots = querySnapshot.docs;
@@ -196,13 +196,76 @@ rhit.FbRestaurantsManager = class {
 	}
 }
 
-// PUT THE DETAIL PAGE CONTROLLER HERE 
+//   DETAIL PAGE CONTROLLER   
 
-// PUT THE SINGLE RESTAURANT MANAGER HERE
+//   SINGLE RESTAURANT MANAGER  
 
-// PUT THE LOGIN PAGE CONTROLLER HERE
+//   LOGIN PAGE CONTROLLER  
+rhit.LoginPageController = class {
+	constructor() {
+		console.log("You have made the login page controller");
+		document.querySelector("#roseFireButton").onclick = (event) => {
+			rhit.fbAuthManager.signIn();
+			console.log("sign in with rose fire todo");
+		};
+	}
+}
 
-// PUT THE AUTH MANAGER HERE 
+
+//   AUTH MANAGER   
+
+rhit.FbAuthManager = class {
+	constructor() {
+	  this._user = null;
+	  console.log("You have made the Auth Manager");
+	}
+	beginListening(changeListener) {
+		firebase.auth().onAuthStateChanged((user) => {
+			this._user = user;
+			changeListener();
+	});
+
+	}
+	signIn() {
+		console.log("todo: sign in with rosefire");
+
+		Rosefire.signIn("d2d8ebfa-4c53-4fa3-baf4-65c4b725efb1", (err, rfUser) => {
+			if (err) {
+			  console.log("Rosefire error!", err);
+			  return;
+			}
+			console.log("Rosefire success!", rfUser);
+
+			firebase.auth().signInWithCustomToken(rfUser.token).catch((error) => {
+				const errorCode = error.code;
+				const errorMessage = error.message; 
+				if (errorCode === 'auth/invalid-custom-token'){
+					alert('The token you provided is not valid');
+
+				} else {
+					console.error("Custom auth error", errorCode, errorMessage);
+				}
+
+			});
+			
+			// TODO: Use the rfUser.token with your server.
+		  });
+		  
+	}
+	signOut() {
+		
+		firebase.auth().signOut().catch(function (error){
+			console.log("an error has occured");
+		});
+	}
+
+	get isSignedIn() {
+		return !!this._user;
+	}
+	get uid() {
+		return this._user.uid; 
+	}
+}
 
 rhit.checkForRedirects = function(){
 	if (document.querySelector("#loginPage") && rhit.fbAuthManager.isSignedIn){
@@ -237,11 +300,11 @@ rhit.initializePage = function(){
 		new rhit.DetailPageController(); 
 	
 	}
-
+*/
 	if(document.querySelector("#loginPage")){
 		console.log("You are on the login page.")
 		new rhit.LoginPageController();
-	} */
+	} 
 } 
 
 
@@ -251,14 +314,14 @@ rhit.initializePage = function(){
 /** function and class syntax examples */
 rhit.main = function () {
 	console.log("Ready: ");
-	// rhit.fbAuthManager = new rhit.FbAuthManager();
-	// rhit.fbAuthManager.beginListening(() => {
-	// 	console.log("auth change callback fired"); 
-	// 	console.log("isSignedIn =", rhit.fbAuthManager.isSignedIn);
-	// 	rhit.checkForRedirects();
-	 	rhit.initializePage();
+	rhit.fbAuthManager = new rhit.FbAuthManager();
+	rhit.fbAuthManager.beginListening(() => {
+		console.log("auth change callback fired"); 
+		console.log("isSignedIn =", rhit.fbAuthManager.isSignedIn);
+		rhit.checkForRedirects();
+		rhit.initializePage();
 		 
-	// });
+	});
 };
 
 rhit.main();
