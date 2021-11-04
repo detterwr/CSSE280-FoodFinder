@@ -15,7 +15,7 @@
     <a class="navbar-brand" href="#">FoodFinder</a>
   </nav>
 
-  <div id="mainPage" class="container page-container">
+  <div id="listPage" class="container page-container">
   </div> -->
   <div class="bmd-layout-container bmd-drawer-f-l bmd-drawer-overlay">
     <header id="topBar" class="bmd-layout-header">
@@ -40,14 +40,14 @@
           Restaurants</a>
         <a id="menuApplyFilters" class="list-group-item"> <i class="material-icons">filter_list</i> Apply Filters</a>
         <a id="menuShowFavorites" class="list-group-item"> <i class="material-icons">person</i>Show Favorites</a>
-        <a id="menuUserInfo" class="list-group-item" data-toggle="modal" data-target="#showUserInfoDialog"> <i
-          class="material-icons">account_circle</i>Account Information</a>
+        <!-- <a id="menuUserInfo" class="list-group-item" data-toggle="modal" data-target="#showUserInfoDialog"> <i
+          class="material-icons">account_circle</i>Account Information</a> -->
         <a id="menuSignOut" class="list-group-item"> <i class="material-icons">login</i>Sign Out</a>
       </ul>
     </div>
 
     <main class="bmd-layout-content">
-      <div id="MainPage" class="container page-container">
+      <div id="listPage" class="container page-container">
         <div id="restaurantListContainer"></div>
 
       </div>
@@ -81,7 +81,7 @@
 
           <div class="form-group bmd-form-group">
             <label for="contentTextarea">Description</label>
-            <textarea class="form-control" id="contentTextarea" rows="10"></textarea>
+            <textarea class="form-control" id="inputDescription" rows="10"></textarea>
           </div>
         </div>
         <div class="modal-footer">
