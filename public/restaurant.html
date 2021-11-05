@@ -66,23 +66,41 @@
           <h4 class="modal-title">Edit This Restaurant</h4>
         </div>
         <div class="modal-body">
-          <div class="form-group bmd-form-group">
-            <label for="inputTitle" class="bmd-label-floating">Restaurant Name</label>
+
+
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Restaurant Name:&nbsp;</span>
             <input type="text" class="form-control" id="inputTitle">
           </div>
-          <div class="form-group bmd-form-group">
-            <label for="inputMenuLink" class="bmd-label-floating">Link to Menu</label>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Link to Menu:&nbsp;</span>
             <input type="text" class="form-control" id="inputMenuLink">
           </div>
-          <div class="form-group bmd-form-group">
-            <label for="inputMapsLink" class="bmd-label-floating">Link to Maps</label>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Link to Maps:&nbsp;</span>
             <input type="text" class="form-control" id="inputMapsLink">
           </div>
-          <div class="form-group bmd-form-group">
-            <label for="inputImageLink" class="bmd-label-floating">Link to Image</label>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Link to Image:&nbsp;</span>
             <input type="text" class="form-control" id="inputImageLink">
           </div>
 
+          <div>
+          <select id="inputCategory" class="form-select" aria-label="Default select example">
+            <option selected>-Specify Category-</option>
+            <option value="1">Chinese</option>
+            <option value="2">Indian</option>
+            <option value="3">Italian</option>
+          </select>
+
+          <select id="inputPrice" class="form-select" aria-label="Default select example">
+            <option selected>-Specify Pricepoint-</option>
+            <option value="1">$</option>
+            <option value="2">$$</option>
+            <option value="3">$$$</option>
+          </select>
+          </div>
           <div class="form-group bmd-form-group">
             <label for="contentTextarea">Description</label>
             <textarea class="form-control" id="inputDescription" rows="10"></textarea>
