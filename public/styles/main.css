@@ -94,11 +94,13 @@ nav.navbar.navbar-dark.fixed-top {
 #menuApplyFilters,
 #menuShowFavorites,
 #menuUserInfo,
+#menuAddRestaurant,
 #menuSignOut{
     color: darkblue;
 }
 
 #menuSignOut:hover,
+#menuAddRestaurant:hover,
 #menuEdit:hover,
 #menuDelete:hover,
 #menuUserInfo:hover,

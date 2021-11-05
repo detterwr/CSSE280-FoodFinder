@@ -96,7 +96,7 @@ rhit.ListPageController = class {
 
 	updateList() {
 		console.log(" I need to update the list on the page!"); 
-		console.log(`Num Quotes: ${rhit.RestaurantsManager.getLength()}`); 
+		console.log(`Number of Restaurants: ${rhit.RestaurantsManager.getLength()}`); 
 		console.log(rhit.RestaurantsManager.getRestaurantAtIndex(0)); 
 
 		//make a new quotelistcontainer, loop to fill it, remove the old one, and put it in the new container. 
@@ -197,8 +197,129 @@ rhit.FbRestaurantsManager = class {
 }
 
 //   DETAIL PAGE CONTROLLER   
+rhit.DetailPageController = class {
+	constructor(){
+		document.querySelector("#menuSignOut").addEventListener("click", (event) => {
+			rhit.fbAuthManager.signOut();
+		});
+
+		document.querySelector("#submitEditRestaurant").addEventListener("click", (event) => {
+			const title = document.querySelector("#inputTitle").value;
+			const menu = document.querySelector("#inputMenuLink").value; 
+			const maps = document.querySelector("#inputMapsLink").value; 
+			const description = document.querySelector("#inputDescription").value; 
+			rhit.SingleRestaurantManager.update(title, menu, maps, description); 
+
+		}); 
+
+		$('#editRestaurantDialog').on('show.bs.modal', (event) => {
+			// Pre animation
+			document.querySelector("#inputTitle").value = rhit.SingleRestaurantManager.title;
+			document.querySelector("#inputMenuLink").value = rhit.SingleRestaurantManager.menuLink; 
+			document.querySelector("#inputMapsLink").value = rhit.SingleRestaurantManager.locationLink; 
+			document.querySelector("#inputDescription").value = rhit.SingleRestaurantManager.description; 
+		}); 
+
+		$("#editRestaurantDialog").on("shown.bs.modal", (event) => {
+			// Post animation
+			document.querySelector("#inputTitle").focus();
+		}); 
+
+		document.querySelector("#submitDeleteRestaurant").addEventListener("click", (event) => {
+			rhit.SingleRestaurantManager.delete().then(function () {
+				console.log("Document successfully deleted");
+				window.location.href = "/list.html"; 
+			}).catch(function (error) {
+				console.error("error removing the document: ", error);
+			});
+
+		}); 
+
+		console.log("made the detail page controller");
+		rhit.SingleRestaurantManager.beginListening(this.updateView.bind(this)); 
+	}
+	updateView(){
+		console.log("The view is being updated");
+		document.querySelector("#cardTitle").innerHTML = rhit.SingleRestaurantManager.title; 
+		document.querySelector("#cardMenuLink").innerHTML = rhit.SingleRestaurantManager.menuLink; 
+		document.querySelector("#cardLocationLink").innerHTML = rhit.SingleRestaurantManager.locationLink; 
+		document.querySelector("#cardDescription").innerHTML = rhit.SingleRestaurantManager.description; 
+
+		if (rhit.SingleRestaurantManager.author == rhit.fbAuthManager.uid){
+			document.querySelector("#menuEdit").style.display = "flex"; 
+			document.querySelector("#menuDelete").style.display = "flex"; 
+		}
+	}
+}
 
 //   SINGLE RESTAURANT MANAGER  
+rhit.FbSingleRestaurantManager = class {
+	constructor(restaurantId) {
+		this._documentSnapshot = {};
+		this._unsubscribe = null; 
+		this._ref = firebase.firestore().collection(rhit.FB_COLLECTION_RESTAURANTS).doc(restaurantId);
+		console.log(`Listening to ${this._ref.path}`); 
+	}
+
+	beginListening(changeListener) {
+
+		this._unsubscribe = this._ref.onSnapshot((doc) => {
+			if (doc.exists){
+				console.log("Document data:", doc.data());
+				this._documentSnapshot = doc;
+				changeListener();
+			} else{
+				console.log("No such document!"); 
+			}
+		}); 
+
+	}
+
+	stopListening() {
+		this._unsubscribe();
+	}
+
+	update(title, menuLink, locationLink, description){
+	this._ref.update({
+		[rhit.FB_KEY_TITLE]: title, 
+		[rhit.FB_KEY_MENU]: menuLink,
+		[rhit.FB_KEY_LOCATION]: locationLink,
+		[rhit.FB_KEY_DESCRIPTION]: description,
+		[rhit.FB_KEY_LAST_TOUCHED]: firebase.firestore.Timestamp.now(), 
+	})
+	.then(function (){
+		console.log("document updated ");
+	})
+	.catch(function (error) {
+		console.error("error editing document: ", error); 
+	});
+}
+
+	delete(){
+		return this._ref.delete();
+	}
+
+	get title() {
+		return this._documentSnapshot.get(rhit.FB_KEY_TITLE); 
+
+	}
+
+	get menuLink() {
+		return this._documentSnapshot.get(rhit.FB_KEY_MENU); 
+	}
+
+	get locationLink() {
+		return this._documentSnapshot.get(rhit.FB_KEY_LOCATION); 
+	}
+	
+	get description() {
+		return this._documentSnapshot.get(rhit.FB_KEY_DESCRIPTION); 
+	}
+	
+	get author() {
+		return this._documentSnapshot.get(rhit.FB_KEY_AUTHOR); 
+	}
+}
 
 //   LOGIN PAGE CONTROLLER  
 rhit.LoginPageController = class {
@@ -287,7 +408,7 @@ rhit.initializePage = function(){
 		new rhit.ListPageController();
 	}
 
-/* 	if(document.querySelector("#detailPage")){
+ 	if(document.querySelector("#detailPage")){
 		console.log("You are on the detail page.")
 		const restaurantId = urlParams.get("id"); 
 
@@ -296,11 +417,11 @@ rhit.initializePage = function(){
 			console.log("Error! Missing restaurant ID"); 
 			window.location.href = "/"; 
 		}
-		rhit.fbSingleQuoteManager = new rhit.FbSingleQuoteManager(restaurantId);
+		rhit.SingleRestaurantManager = new rhit.FbSingleRestaurantManager(restaurantId);
 		new rhit.DetailPageController(); 
 	
 	}
-*/
+
 	if(document.querySelector("#loginPage")){
 		console.log("You are on the login page.")
 		new rhit.LoginPageController();
