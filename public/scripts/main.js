@@ -12,6 +12,9 @@ rhit.FB_KEY_TITLE = "title";
 rhit.FB_KEY_DESCRIPTION = "description";
 rhit.FB_KEY_LOCATION = "locationLink";
 rhit.FB_KEY_MENU = "menuLink";
+rhit.FB_KEY_IMAGE = "imageLink";
+rhit.FB_KEY_PRICE = 0;
+rhit.FB_KEY_CATEGORY = "category"; 
 rhit.FB_KEY_LAST_TOUCHED = "lastTouched";
 rhit.FB_KEY_AUTHOR = "author"; 
 rhit.RestaurantsManager = null;
@@ -23,7 +26,7 @@ rhit.fbAuthManager = null;
 // rhit.FB_COLLECTION_USERS = "Users";
 // rhit.FB_COLLECTION_FILTERS = "Filters";
 // rhit.FB_KEY_USERNAME = "userName";
-// rhit.FB_KEY_UID = "uid";
+ rhit.FB_KEY_UID = "uid";
 
 // rhit.UserManager = null;
 // rhit.SingleUserManager = null;
@@ -62,9 +65,10 @@ rhit.ListPageController = class {
 			const title = document.querySelector("#inputTitle").value;
 			const menu = document.querySelector("#inputMenuLink").value; 
 			const maps = document.querySelector("#inputMapsLink").value; 
+			const image = document.querySelector("#inputImageLink").value; 
 			const description = document.querySelector("#inputDescription").value; 
  
-			rhit.RestaurantsManager.add(title, menu, maps, description); 
+			rhit.RestaurantsManager.add(title, menu, maps, image, description); 
 		}); 
 
 		$('#addRestaurantDialog').on('show.bs.modal', (event) => {
@@ -72,6 +76,7 @@ rhit.ListPageController = class {
 			document.querySelector("#inputTitle").value = "";
 			document.querySelector("#inputMenuLink").value = ""; 
 			document.querySelector("#inputMapsLink").value = ""; 
+			document.querySelector("#inputImageLink").value = ""; 
 			document.querySelector("#inputDescription").value = ""; 
 		}); 
 
@@ -87,11 +92,12 @@ rhit.ListPageController = class {
 		return htmlToElement(`<div class="card">
         <div class="card-body">
           <h5 class="card-title">${restaurant.title}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">${restaurant.locationLink}</h6>
-		  <h6 class="card-subtitle mb-2 text-muted">${restaurant.menuLink}</h6>
-		  <p class="card-subtitle mb-2 text-muted">${restaurant.description}</p>
+          <h6 class="card-subtitle mb-2 text-muted">${restaurant.category}</h6>
+		  <h6 class="card-subtitle mb-2 text-muted">${restaurant.price}</h6>
+	
         </div>
       </div>`); 
+	  //	  <p class="card-subtitle mb-2 text-muted">${restaurant.description}</p>
 	}
 
 	updateList() {
@@ -99,7 +105,7 @@ rhit.ListPageController = class {
 		console.log(`Number of Restaurants: ${rhit.RestaurantsManager.getLength()}`); 
 		console.log(rhit.RestaurantsManager.getRestaurantAtIndex(0)); 
 
-		//make a new quotelistcontainer, loop to fill it, remove the old one, and put it in the new container. 
+
 		const newList = htmlToElement('<div id="restaurantListContainer"></div>'); 
 
 		for (let i = 0; i < rhit.RestaurantsManager.getLength(); i++) {
@@ -127,11 +133,14 @@ rhit.ListPageController = class {
 }
 
 rhit.restaurant = class {
-	constructor(id, title, menuLink, locationLink, description){
+	constructor(id, title, menuLink, locationLink, imageLink, description){
 		this.id = id;
 		this.title = title; 
 		this.menuLink = menuLink; 
 		this.locationLink = locationLink; 
+		this.imageLink = imageLink;
+		//this.price = price;
+		//this.category = category; 
 		this.description = description; 
 	}
 }
@@ -145,13 +154,16 @@ rhit.FbRestaurantsManager = class {
 	this._unsubscribe = null;
 	}
 
-	add(title, menuLink, locationLink, description){
+	add(title, menuLink, locationLink, imageLink, description){
 		this._ref.add({
 			[rhit.FB_KEY_TITLE]: title, 
 			[rhit.FB_KEY_MENU]: menuLink,
 			[rhit.FB_KEY_LOCATION]: locationLink,
+			[rhit.FB_KEY_IMAGE]: imageLink,
+			[rhit.FB_KEY_PRICE]: price,
+			[rhit.FB_KEY_CATEGORY]: category,
 			[rhit.FB_KEY_DESCRIPTION]: description,
-			//[rhit.FB_KEY_AUTHOR]: rhit.fbAuthManager.uid,
+			[rhit.FB_KEY_AUTHOR]: rhit.fbAuthManager.uid,
 			[rhit.FB_KEY_LAST_TOUCHED]: firebase.firestore.Timestamp.now(), 
 			
 		})
@@ -190,6 +202,9 @@ rhit.FbRestaurantsManager = class {
 			docSnapshot.get(rhit.FB_KEY_TITLE),
 			docSnapshot.get(rhit.FB_KEY_MENU),
 			docSnapshot.get(rhit.FB_KEY_LOCATION),
+			docSnapshot.get(rhit.FB_KEY_IMAGE),
+			//docSnapshot.get(rhit.FB_KEY_PRICE),
+			//docSnapshot.get(rhit.FB_KEY_CATEGORY),
 			docSnapshot.get(rhit.FB_KEY_DESCRIPTION)
 		);
 		return rt;
@@ -207,8 +222,9 @@ rhit.DetailPageController = class {
 			const title = document.querySelector("#inputTitle").value;
 			const menu = document.querySelector("#inputMenuLink").value; 
 			const maps = document.querySelector("#inputMapsLink").value; 
+			const image = document.querySelector("#inputImageLink").value; 
 			const description = document.querySelector("#inputDescription").value; 
-			rhit.SingleRestaurantManager.update(title, menu, maps, description); 
+			rhit.SingleRestaurantManager.update(title, menu, maps, image, description); 
 
 		}); 
 
@@ -217,6 +233,7 @@ rhit.DetailPageController = class {
 			document.querySelector("#inputTitle").value = rhit.SingleRestaurantManager.title;
 			document.querySelector("#inputMenuLink").value = rhit.SingleRestaurantManager.menuLink; 
 			document.querySelector("#inputMapsLink").value = rhit.SingleRestaurantManager.locationLink; 
+			document.querySelector("#inputImageLink").value = rhit.SingleRestaurantManager.imageLink; 
 			document.querySelector("#inputDescription").value = rhit.SingleRestaurantManager.description; 
 		}); 
 
@@ -241,8 +258,9 @@ rhit.DetailPageController = class {
 	updateView(){
 		console.log("The view is being updated");
 		document.querySelector("#cardTitle").innerHTML = rhit.SingleRestaurantManager.title; 
-		document.querySelector("#cardMenuLink").innerHTML = rhit.SingleRestaurantManager.menuLink; 
-		document.querySelector("#cardLocationLink").innerHTML = rhit.SingleRestaurantManager.locationLink; 
+		document.querySelector("#cardMenuLink").href = rhit.SingleRestaurantManager.menuLink; 
+		document.querySelector("#cardLocationLink").href = rhit.SingleRestaurantManager.locationLink; 
+		document.querySelector("#cardImageLink").src = rhit.SingleRestaurantManager.imageLink;
 		document.querySelector("#cardDescription").innerHTML = rhit.SingleRestaurantManager.description; 
 
 		if (rhit.SingleRestaurantManager.author == rhit.fbAuthManager.uid){
@@ -279,11 +297,12 @@ rhit.FbSingleRestaurantManager = class {
 		this._unsubscribe();
 	}
 
-	update(title, menuLink, locationLink, description){
+	update(title, menuLink, locationLink, imageLink, description){
 	this._ref.update({
 		[rhit.FB_KEY_TITLE]: title, 
 		[rhit.FB_KEY_MENU]: menuLink,
 		[rhit.FB_KEY_LOCATION]: locationLink,
+		[rhit.FB_KEY_IMAGE]: imageLink,
 		[rhit.FB_KEY_DESCRIPTION]: description,
 		[rhit.FB_KEY_LAST_TOUCHED]: firebase.firestore.Timestamp.now(), 
 	})
@@ -310,6 +329,10 @@ rhit.FbSingleRestaurantManager = class {
 
 	get locationLink() {
 		return this._documentSnapshot.get(rhit.FB_KEY_LOCATION); 
+	}
+
+	get imageLink() {
+		return this._documentSnapshot.get(rhit.FB_KEY_IMAGE); 
 	}
 	
 	get description() {

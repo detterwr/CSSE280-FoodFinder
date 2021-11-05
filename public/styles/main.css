@@ -139,6 +139,10 @@ input{
     margin: 10px 0;
 }
 
+#cardDescription{
+    margin-top: 5px; 
+}
+
 #MainPage .card-title,
 #MainPage .card-subtitle {
     white-space: nowrap;
