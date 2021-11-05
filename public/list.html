@@ -38,8 +38,8 @@
       <ul class="list-group">
         <a id="menuShowRestaurants" class="list-group-item"> <i class="material-icons">restaurant</i> Show All
           Restaurants</a>
-        <a id="menuApplyFilters" class="list-group-item"> <i class="material-icons">filter_list</i> Apply Filters</a>
-        <a id="menuShowFavorites" class="list-group-item"> <i class="material-icons">person</i>Show Favorites</a>
+        <a id="menuApplyFilters" class="list-group-item" data-toggle="modal" data-target="#filterDialog"> <i class="material-icons">filter_list</i> Apply Filters</a>
+        <a id="menuShowFavorites" class="list-group-item"> <i class="material-icons">person</i>Show Favorites Only</a>
         <!-- <a id="menuUserInfo" class="list-group-item" data-toggle="modal" data-target="#showUserInfoDialog"> <i
           class="material-icons">account_circle</i>Account Information</a> -->
         <a id="menuAddRestaurant" class="list-group-item" data-toggle="modal" data-target="#addRestaurantDialog"> <i class="material-icons">add</i>Add a Restaurant</a>
@@ -83,17 +83,19 @@
 
           <div>
             <select id="inputCategory" class="form-select" aria-label="Default select example">
-              <option selected>-Specify Category-</option>
-              <option value="1">Chinese</option>
-              <option value="2">Indian</option>
-              <option value="3">Italian</option>
+              <option value="">-Specify Category-</option>
+              <option value="Chinese">Chinese</option>
+              <option value="Indian">Indian</option>
+              <option value="Italian">Italian</option>
+              <option value="Fast Food">Fast Food</option>
+              <option value="Other">Other</option>
             </select>
   
             <select id="inputPrice" class="form-select" aria-label="Default select example">
-              <option selected>-Specify Pricepoint-</option>
-              <option value="1">$</option>
-              <option value="2">$$</option>
-              <option value="3">$$$</option>
+              <option value="">-Specify Pricepoint-</option>
+              <option value="$">$</option>
+              <option value="$$">$$</option>
+              <option value="$$$">$$$</option>
             </select>
             </div>
 
@@ -105,6 +107,41 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
           <button id="submitAddRestaurant" type="button" class="btn btn-primary" data-dismiss="modal">CREATE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="filterDialog" tabindex="-1" role="dialog" aria-labelledby="Filter restaurant dialog"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Choose to Apply Filters</h4>
+        </div>
+        <div class="modal-body">
+          <div>
+            <select id="filterCategory" class="form-select" aria-label="Default select example">
+              <option value="all">-Apply All Categories-</option>
+              <option value="Chinese">Chinese</option>
+              <option value="Indian">Indian</option>
+              <option value="Italian">Italian</option>
+              <option value="Fast Food">Fast Food</option>
+              <option value="Other">Other</option>
+            </select>
+  
+            <select id="filterPrice" class="form-select" aria-label="Default select example">
+              <option value="all">-Apply All Price Levels-</option>
+              <option value="$">$</option>
+              <option value="$$">$$</option>
+              <option value="$$$">$$$</option>
+            </select>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
+          <button id="filterRestaurants" type="button" class="btn btn-primary" data-dismiss="modal">APPLY</button>
         </div>
       </div>
     </div>

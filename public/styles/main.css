@@ -160,3 +160,9 @@ input{
     padding: 10px 30px; 
     border-radius: 5px;
 }
+
+button#favorite-btn {
+    margin: 10px auto;
+    display: contents;
+    font-size: 1.5em;
+}

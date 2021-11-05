@@ -13,10 +13,11 @@ rhit.FB_KEY_DESCRIPTION = "description";
 rhit.FB_KEY_LOCATION = "locationLink";
 rhit.FB_KEY_MENU = "menuLink";
 rhit.FB_KEY_IMAGE = "imageLink";
-rhit.FB_KEY_PRICE = 0;
+rhit.FB_KEY_PRICE = "price";
 rhit.FB_KEY_CATEGORY = "category"; 
 rhit.FB_KEY_LAST_TOUCHED = "lastTouched";
 rhit.FB_KEY_AUTHOR = "author"; 
+rhit.FB_KEY_FAVORITEUSERS = "favoriteUsers";
 rhit.RestaurantsManager = null;
 rhit.SingleRestaurantManager = null;
 rhit.fbAuthManager = null;
@@ -45,15 +46,15 @@ rhit.ListPageController = class {
 		document.querySelector("#menuShowRestaurants").addEventListener("click", (event) => {
 			window.location.href = "/list.html"; 
 		}); 
-		document.querySelector("#menuApplyFilters").addEventListener("click", (event) => {
+		document.querySelector("#menuShowFavorites").addEventListener("click", (event) => {
 			window.location.href = `/list.html?uid=${rhit.fbAuthManager.uid}`; 
 		}); 
-		document.querySelector("#menuApplyFilters").addEventListener("click", (event) => {
+		document.querySelector("#filterRestaurants").addEventListener("click", (event) => {
 			//TODO
 			console.log("applying filters"); 
-		}); 
-		document.querySelector("#menuShowFavorites").addEventListener("click", (event) => {
-			//TODO
+			const cat = document.querySelector("#filterCategory").value;
+			const pr = document.querySelector("#filterPrice").value; 
+			window.location.href = `/list.html?category=${cat}&price=${pr}`;
 		}); 
 		
 		document.querySelector("#menuSignOut").addEventListener("click", (event) => {
@@ -67,8 +68,11 @@ rhit.ListPageController = class {
 			const maps = document.querySelector("#inputMapsLink").value; 
 			const image = document.querySelector("#inputImageLink").value; 
 			const description = document.querySelector("#inputDescription").value; 
+
+			const category = document.querySelector("#inputCategory").value; 
+			const price = document.querySelector("#inputPrice").value; 
  
-			rhit.RestaurantsManager.add(title, menu, maps, image, description); 
+			rhit.RestaurantsManager.add(title, menu, maps, image, description, category, price); 
 		}); 
 
 		$('#addRestaurantDialog').on('show.bs.modal', (event) => {
@@ -92,9 +96,8 @@ rhit.ListPageController = class {
 		return htmlToElement(`<div class="card">
         <div class="card-body">
           <h5 class="card-title">${restaurant.title}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">${restaurant.category}</h6>
-		  <h6 class="card-subtitle mb-2 text-muted">${restaurant.price}</h6>
-	
+          <h6 class="card-subtitle mb-2 text-muted">CATEGORY: ${restaurant.category}</h6>
+		  <h6 class="card-subtitle mb-2 text-muted">PRICE: ${restaurant.price}</h6>
         </div>
       </div>`); 
 	  //	  <p class="card-subtitle mb-2 text-muted">${restaurant.description}</p>
@@ -133,39 +136,41 @@ rhit.ListPageController = class {
 }
 
 rhit.restaurant = class {
-	constructor(id, title, menuLink, locationLink, imageLink, description){
+	constructor(id, title, menuLink, locationLink, imageLink, description, category, price){
 		this.id = id;
 		this.title = title; 
 		this.menuLink = menuLink; 
 		this.locationLink = locationLink; 
 		this.imageLink = imageLink;
-		//this.price = price;
-		//this.category = category; 
+		this.price = price;
+		this.category = category; 
 		this.description = description; 
 	}
 }
 
 rhit.FbRestaurantsManager = class {
-	constructor(uid){
+	constructor(uid, category, price){
 	console.log("created FbRestaurantsManager")
 	this._uid = uid; 
+	this._category = category;
+	this._price = price;
 	this._documentSnapshots = [];
 	this._ref = firebase.firestore().collection(rhit.FB_COLLECTION_RESTAURANTS);
 	this._unsubscribe = null;
 	}
 
-	add(title, menuLink, locationLink, imageLink, description){
+	add(title, menuLink, locationLink, imageLink, description, category, price){
 		this._ref.add({
 			[rhit.FB_KEY_TITLE]: title, 
 			[rhit.FB_KEY_MENU]: menuLink,
 			[rhit.FB_KEY_LOCATION]: locationLink,
 			[rhit.FB_KEY_IMAGE]: imageLink,
-			//[rhit.FB_KEY_PRICE]: price,
-		//	[rhit.FB_KEY_CATEGORY]: category,
+			[rhit.FB_KEY_PRICE]: price,
+			[rhit.FB_KEY_CATEGORY]: category,
 			[rhit.FB_KEY_DESCRIPTION]: description,
 			[rhit.FB_KEY_AUTHOR]: rhit.fbAuthManager.uid,
 			[rhit.FB_KEY_LAST_TOUCHED]: firebase.firestore.Timestamp.now(), 
-			
+			[rhit.FB_KEY_FAVORITEUSERS]: [],
 		})
 		.then(function (docRef){
 			console.log("document written with id: ", docRef.id);
@@ -179,8 +184,18 @@ rhit.FbRestaurantsManager = class {
 		//let query = this._ref.orderBy(rhit.FB_KEY_LAST_TOUCHED, "desc").limit(50);
 		let query = this._ref;
 	 	if (this._uid) {
-			query = query.where(rhit.FB_KEY_AUTHOR, "==", this._uid);
-		 }
+			// query = query.where(rhit.FB_KEY_AUTHOR, "==", this._uid);
+			query = query.where(rhit.FB_KEY_FAVORITEUSERS, "array-contains", this._uid);
+		 } 
+		else if (this._price && this._price!="all"){
+			query = query.where(rhit.FB_KEY_PRICE, "==", this._price);
+			 if(this._category && this._category!="all"){
+				query = query.where(rhit.FB_KEY_CATEGORY, "==", this._category);
+			 }
+		} 
+		else if(this._category && this._category!="all"){
+			query = query.where(rhit.FB_KEY_CATEGORY, "==", this._category);
+		}
 		this._unsubscribe = query.onSnapshot((querySnapshot) => {
 				console.log("Restaurant update!");
 				this._documentSnapshots = querySnapshot.docs;
@@ -203,9 +218,9 @@ rhit.FbRestaurantsManager = class {
 			docSnapshot.get(rhit.FB_KEY_MENU),
 			docSnapshot.get(rhit.FB_KEY_LOCATION),
 			docSnapshot.get(rhit.FB_KEY_IMAGE),
-			//docSnapshot.get(rhit.FB_KEY_PRICE),
-			//docSnapshot.get(rhit.FB_KEY_CATEGORY),
-			docSnapshot.get(rhit.FB_KEY_DESCRIPTION)
+			docSnapshot.get(rhit.FB_KEY_DESCRIPTION),
+			docSnapshot.get(rhit.FB_KEY_CATEGORY),
+			docSnapshot.get(rhit.FB_KEY_PRICE),
 		);
 		return rt;
 	}
@@ -217,14 +232,23 @@ rhit.DetailPageController = class {
 		document.querySelector("#menuSignOut").addEventListener("click", (event) => {
 			rhit.fbAuthManager.signOut();
 		});
-
+		document.querySelector("#back-btn").addEventListener("click", (event) => {
+			window.location.href = "/list.html"; 
+		}); 
+		document.querySelector("#favorite-btn").addEventListener("click", (event) => {
+			rhit.SingleRestaurantManager.favorite(rhit.fbAuthManager.uid);
+		}); 
 		document.querySelector("#submitEditRestaurant").addEventListener("click", (event) => {
 			const title = document.querySelector("#inputTitle").value;
 			const menu = document.querySelector("#inputMenuLink").value; 
 			const maps = document.querySelector("#inputMapsLink").value; 
 			const image = document.querySelector("#inputImageLink").value; 
 			const description = document.querySelector("#inputDescription").value; 
-			rhit.SingleRestaurantManager.update(title, menu, maps, image, description); 
+
+			const category = document.querySelector("#inputCategory").value; 
+			const price = document.querySelector("#inputPrice").value; 
+
+			rhit.SingleRestaurantManager.update(title, menu, maps, image, description, category, price); 
 
 		}); 
 
@@ -234,7 +258,10 @@ rhit.DetailPageController = class {
 			document.querySelector("#inputMenuLink").value = rhit.SingleRestaurantManager.menuLink; 
 			document.querySelector("#inputMapsLink").value = rhit.SingleRestaurantManager.locationLink; 
 			document.querySelector("#inputImageLink").value = rhit.SingleRestaurantManager.imageLink; 
-			document.querySelector("#inputDescription").value = rhit.SingleRestaurantManager.description; 
+			document.querySelector("#inputDescription").value = rhit.SingleRestaurantManager.description;
+			
+			document.querySelector("#inputCategory").value = rhit.SingleRestaurantManager.category;
+			document.querySelector("#inputPrice").value = rhit.SingleRestaurantManager.price;
 		}); 
 
 		$("#editRestaurantDialog").on("shown.bs.modal", (event) => {
@@ -263,10 +290,18 @@ rhit.DetailPageController = class {
 		document.querySelector("#cardImageLink").src = rhit.SingleRestaurantManager.imageLink;
 		document.querySelector("#cardDescription").innerHTML = rhit.SingleRestaurantManager.description; 
 
+		if (rhit.SingleRestaurantManager.favoriteUsers.includes(rhit.fbAuthManager.uid)){
+			document.querySelector("#favorite-btn").style.color = "red"; 
+			// document.querySelector("#menuDelete").style.display = "flex"; 
+		}else{
+			document.querySelector("#favorite-btn").style.color = "white"; 
+		}
+
 		if (rhit.SingleRestaurantManager.author == rhit.fbAuthManager.uid){
 			document.querySelector("#menuEdit").style.display = "flex"; 
 			document.querySelector("#menuDelete").style.display = "flex"; 
 		}
+
 	}
 }
 
@@ -297,12 +332,33 @@ rhit.FbSingleRestaurantManager = class {
 		this._unsubscribe();
 	}
 
-	update(title, menuLink, locationLink, imageLink, description){
+	favorite(uid){
+		const ar = this._documentSnapshot.get(rhit.FB_KEY_FAVORITEUSERS);
+		if(!ar.includes(uid)){
+		ar.push(uid);
+		} else{
+			ar.pop(uid);
+		}
+		this._ref.update({
+			[rhit.FB_KEY_FAVORITEUSERS]: ar, 
+		})
+		.then(function (){
+			console.log("restaurant (un)favorited ");
+			// console.log(ar);
+		})
+		.catch(function (error) {
+			console.error("error favoriting document: ", error); 
+		});
+	}
+
+	update(title, menuLink, locationLink, imageLink, description, price, category){
 	this._ref.update({
 		[rhit.FB_KEY_TITLE]: title, 
 		[rhit.FB_KEY_MENU]: menuLink,
 		[rhit.FB_KEY_LOCATION]: locationLink,
 		[rhit.FB_KEY_IMAGE]: imageLink,
+		[rhit.FB_KEY_PRICE]: price,
+		[rhit.FB_KEY_CATEGORY]: category,
 		[rhit.FB_KEY_DESCRIPTION]: description,
 		[rhit.FB_KEY_LAST_TOUCHED]: firebase.firestore.Timestamp.now(), 
 	})
@@ -341,6 +397,18 @@ rhit.FbSingleRestaurantManager = class {
 	
 	get author() {
 		return this._documentSnapshot.get(rhit.FB_KEY_AUTHOR); 
+	}
+
+	get category() {
+		return this._documentSnapshot.get(rhit.FB_KEY_CATEGORY); 
+	}
+	
+	get price() {
+		return this._documentSnapshot.get(rhit.FB_KEY_PRICE); 
+	}
+
+	get favoriteUsers() {
+		return this._documentSnapshot.get(rhit.FB_KEY_FAVORITEUSERS); 
 	}
 }
 
@@ -427,7 +495,9 @@ rhit.initializePage = function(){
 	if(document.querySelector("#listPage")){
 		console.log("You are on the list page.")
 		const uid = urlParams.get("uid");
-		rhit.RestaurantsManager = new rhit.FbRestaurantsManager(uid);
+		const category = urlParams.get("category");
+		const price = urlParams.get("price");
+		rhit.RestaurantsManager = new rhit.FbRestaurantsManager(uid, category, price);
 		new rhit.ListPageController();
 	}
 
