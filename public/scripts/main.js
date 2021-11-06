@@ -264,7 +264,7 @@ rhit.DetailPageController = class {
 			const category = document.querySelector("#inputCategory").value; 
 			const price = document.querySelector("#inputPrice").value; 
 
-			rhit.SingleRestaurantManager.update(title, menu, maps, image, description, category, price); 
+			rhit.SingleRestaurantManager.update(title, menu, maps, image, description, price, category); 
 
 		}); 
 
