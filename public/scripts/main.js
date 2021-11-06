@@ -57,6 +57,16 @@ rhit.ListPageController = class {
 			window.location.href = `/list.html?category=${cat}&price=${pr}`;
 		}); 
 		
+		document.querySelector("#clearbutton").addEventListener("click", (event) => {
+			document.querySelector("#searchcontent").value = "";
+		}); 
+
+		document.querySelector("#searchbutton").addEventListener("click", (event) => {
+			const ser = document.querySelector("#searchcontent").value;
+			document.querySelector("#searchcontent").value = "";
+			window.location.href = `/list.html?search=${ser}`;
+		}); 
+		
 		document.querySelector("#menuSignOut").addEventListener("click", (event) => {
 			rhit.fbAuthManager.signOut(); 
 		}); 
@@ -149,11 +159,12 @@ rhit.restaurant = class {
 }
 
 rhit.FbRestaurantsManager = class {
-	constructor(uid, category, price){
+	constructor(uid, category, price, search){
 	console.log("created FbRestaurantsManager")
 	this._uid = uid; 
 	this._category = category;
 	this._price = price;
+	this._search = search;
 	this._documentSnapshots = [];
 	this._ref = firebase.firestore().collection(rhit.FB_COLLECTION_RESTAURANTS);
 	this._unsubscribe = null;
@@ -196,6 +207,11 @@ rhit.FbRestaurantsManager = class {
 		else if(this._category && this._category!="all"){
 			query = query.where(rhit.FB_KEY_CATEGORY, "==", this._category);
 		}
+		if (this._search) {
+			// query = query.where(rhit.FB_KEY_AUTHOR, "==", this._uid);
+			query = query.where(rhit.FB_KEY_TITLE, ">=", this._search.toUpperCase())
+			.where(rhit.FB_KEY_TITLE, "<=", this._search.toLowerCase() + "\uf8ff");
+		 } 
 		this._unsubscribe = query.onSnapshot((querySnapshot) => {
 				console.log("Restaurant update!");
 				this._documentSnapshots = querySnapshot.docs;
@@ -497,7 +513,8 @@ rhit.initializePage = function(){
 		const uid = urlParams.get("uid");
 		const category = urlParams.get("category");
 		const price = urlParams.get("price");
-		rhit.RestaurantsManager = new rhit.FbRestaurantsManager(uid, category, price);
+		const search = urlParams.get("search")
+		rhit.RestaurantsManager = new rhit.FbRestaurantsManager(uid, category, price, search);
 		new rhit.ListPageController();
 	}
 
