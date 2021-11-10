@@ -5,13 +5,21 @@ body {
     /* the image is only for prototype use, and we give full credit of it to Mesa Cafe*/
 }
 
-h1 {
+h1{
     margin-bottom: 0px;
     font-size: 2.5em;
     font-family: 'Lobster', cursive;
-    color: lightyellow;
+    /* color: lightyellow; */
     text-align: center;
 }
+
+#clearbutton, #searchbutton{
+    padding-right: 5px;
+    padding-left: 5px;
+    padding-top: 2px;
+    padding-bottom: 1px;
+}
+
 
 #topWord{
     font-size: 2em;
@@ -60,6 +68,7 @@ nav.navbar.navbar-dark.fixed-top {
     position: fixed;
     /* z-index: 5; */
 }
+
 
 #searchcontent{
     max-width: 50%;
@@ -125,8 +134,7 @@ input{
 }
 #searchbutton,
 #clearbutton{
-    background-color: orangered;
-    color: white;
+    color: white; 
     margin:3px;
 }
 
@@ -141,6 +149,16 @@ input{
 
 #cardDescription{
     margin-top: 5px; 
+}
+
+#welcome_box{
+    background-color:pink;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    border-radius: 5px;
+    padding: 20px;
 }
 
 #MainPage .card-title,
@@ -161,8 +179,26 @@ input{
     border-radius: 5px;
 }
 
-button#favorite-btn {
-    margin: 10px auto;
-    display: contents;
-    font-size: 1.5em;
+
+
+#back-btn{
+    color:white;
+    margin: auto;
+    padding: auto;
+    display:inline;
+}
+
+#favorite-btn{
+    padding: 0.23em;
+}
+
+#menuModalButton{
+    color:white;
+}
+
+
+
+img {
+    max-width: 100%;
+    max-height: 100%;
 }

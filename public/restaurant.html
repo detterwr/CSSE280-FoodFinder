@@ -13,15 +13,10 @@
 <body>
   <nav class="navbar navbar-dark fixed-top">
       <div class="mr-auto">
-        <button class="btn bmd-btn-icon" type="button" id="back-btn">
-            <i class="material-icons" href="/list.html">arrow_left</i>
-          </button>
-    
-        <a class="navbar-brand" ">Restaurant Details</a>
-    
-        <button class="btn bmd-btn-icon" type="button" id="favorite-btn">
-            <i class="material-icons">star</i>&nbsp;add to favorites
-          </button>
+        <button type="button" class="btn" id="back-btn">
+            <i class="material-icons" href="/list.html">arrow_left</i></button>
+
+        <!-- <button id="favorite-btn" class "btn btn-primary"><i class="material-icons">star</i>&nbsp;</button> -->
 
 
       </div>
@@ -48,10 +43,11 @@
         <h5 id="cardTitle" class="card-title">Loading...</h5>
         <a id="cardMenuLink" class="btn btn-outline" target="_blank">Link to Menu</a>
         <a id="cardLocationLink" class="btn btn-outline" target="_blank">Get Directions</a>
-        <img id="cardImageLink">
+        <button id="favorite-btn" class="btn btn-outline" ><i class="material-icons">star</i></button>
         <p id="cardDescription" class="card-subtitle mb-2 text-muted"></p>
-        
+        <div><img id="cardImageLink"></div>
       </div>
+  
     </div>
 </div>
   </div>
@@ -89,11 +85,17 @@
           <div>
           <select id="inputCategory" class="form-select" aria-label="Default select example">
             <option value="">-Specify Category-</option>
+            <option value="American">American</option>
+            <option value="Bar">Bar</option>
+            <option value="BBQ">BBQ</option>
             <option value="Chinese">Chinese</option>
-              <option value="Indian">Indian</option>
-              <option value="Italian">Italian</option>
-              <option value="Fast Food">Fast Food</option>
-              <option value="Other">Other</option>
+            <option value="Fast Food">Fast Food</option>
+            <option value="Indian">Indian</option>
+            <option value="Italian">Italian</option>
+            <option value="Japanese">Japanese</option>
+            <option value="Mexican">Mexican</option>
+            <option value="Steakhouse">Steakhouse</option>
+            <option value="Other">Other</option>
           </select>
 
           <select id="inputPrice" class="form-select" aria-label="Default select example">

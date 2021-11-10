@@ -20,13 +20,14 @@
   <div class="bmd-layout-container bmd-drawer-f-l bmd-drawer-overlay">
     <header id="topBar" class="bmd-layout-header">
       <div class="navbar navbar-dark bg-faded">
-        <button class="navbar-toggler" type="button" data-toggle="drawer" data-target="#dw-s2">
+        <button id="menuModalButton" class="navbar-toggler" type="button" data-toggle="drawer" data-target="#dw-s2">
           <i id="menu" class="material-icons">menu</i>
         </button>
         <div id="searchBar" class="ml-auto">
-          <button id="clearbutton">Clear</button>
-          <input id="searchcontent" type="text">
-          <button id="searchbutton">Search</button>
+          <input id="searchcontent"  type="search" placeholder="Search" aria-label="Search">
+          <!-- <input id="searchcontent" type="text"> -->
+          <button id="clearbutton" class="btn btn-primary" ><i class="material-icons">clear</i></button>
+          <button id="searchbutton" class="btn btn-primary"><i class="material-icons">search</i></button>
         </div>
       </div>
     </header>
@@ -84,10 +85,16 @@
           <div>
             <select id="inputCategory" class="form-select" aria-label="Default select example">
               <option value="">-Specify Category-</option>
+              <option value="American">American</option>
+              <option value="Bar">Bar</option>
+              <option value="BBQ">BBQ</option>
               <option value="Chinese">Chinese</option>
+              <option value="Fast Food">Fast Food</option>
               <option value="Indian">Indian</option>
               <option value="Italian">Italian</option>
-              <option value="Fast Food">Fast Food</option>
+              <option value="Japanese">Japanese</option>
+              <option value="Mexican">Mexican</option>
+              <option value="Steakhouse">Steakhouse</option>
               <option value="Other">Other</option>
             </select>
   
@@ -123,10 +130,16 @@
           <div>
             <select id="filterCategory" class="form-select" aria-label="Default select example">
               <option value="all">-Apply All Categories-</option>
+              <option value="American">American</option>
+              <option value="Bar">Bar</option>
+              <option value="BBQ">BBQ</option>
               <option value="Chinese">Chinese</option>
+              <option value="Fast Food">Fast Food</option>
               <option value="Indian">Indian</option>
               <option value="Italian">Italian</option>
-              <option value="Fast Food">Fast Food</option>
+              <option value="Japanese">Japanese</option>
+              <option value="Mexican">Mexican</option>
+              <option value="Steakhouse">Steakhouse</option>
               <option value="Other">Other</option>
             </select>
   

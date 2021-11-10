@@ -310,7 +310,7 @@ rhit.DetailPageController = class {
 			document.querySelector("#favorite-btn").style.color = "red"; 
 			// document.querySelector("#menuDelete").style.display = "flex"; 
 		}else{
-			document.querySelector("#favorite-btn").style.color = "white"; 
+			document.querySelector("#favorite-btn").style.color = "black"; 
 		}
 
 		if (rhit.SingleRestaurantManager.author == rhit.fbAuthManager.uid){
@@ -516,6 +516,7 @@ rhit.initializePage = function(){
 		const search = urlParams.get("search")
 		rhit.RestaurantsManager = new rhit.FbRestaurantsManager(uid, category, price, search);
 		new rhit.ListPageController();
+		//document.querySelector("#searchcontent").value = "Search";
 	}
 
  	if(document.querySelector("#detailPage")){
