@@ -20,16 +20,25 @@ h1{
     padding-bottom: 1px;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Libre+Baskerville:ital@1&family=Lobster&display=swap');
 
 #topWord{
-    font-size: 2em;
+    font-size: 2.3em;
     font-family: 'Lobster', cursive;
-    color: lightyellow;
+    font-weight: bold;
+    color:salmon;
+    /* color: lightyellow; */
 }
 
 h5 {
     font-family: 'Lobster', cursive;
+    font-style: italic;
+    font-weight: bold;
     /* color: lightyellow; */
+}
+
+h6 {
+    font-family: 'Libre Baskerville', serif;
 }
 
 #fab {
@@ -42,7 +51,7 @@ h5 {
 }
 
 .modal-backdrop {
-    background-color: #F2A97E;
+    background-color: #f58f54c2;
  }
 
 #fab:active {
@@ -51,7 +60,7 @@ h5 {
 }
 
 .navbar {
-    background-color: #800000;
+    background-color:rgba(204, 38, 66, 0.849);
     color: white;
 
 }
@@ -71,7 +80,13 @@ nav.navbar.navbar-dark.fixed-top {
 
 
 #searchcontent{
-    max-width: 50%;
+    max-width: 70%;
+      background-position: 10px 12px;
+  background-repeat: no-repeat;
+  font-size: 16px;
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  /* margin-bottom: 12px; */
 }
 
 #optionsDiv{
@@ -87,7 +102,7 @@ nav.navbar.navbar-dark.fixed-top {
 }
 
 .bmd-layout-drawer>header {
-    background-color: rgb(255, 0, 179);
+    background-color:rgba(47, 0, 255, 0.808);
     color: lightblue;
 }
 
@@ -97,6 +112,10 @@ nav.navbar.navbar-dark.fixed-top {
 
 .list-group-item :first-child {
     margin-right: 0.67rem;
+}
+
+.list-group-item {
+    cursor: pointer;
 }
 
 #menuShowRestaurants,
@@ -145,7 +164,21 @@ input{
 .card {
     background-color: pink;
     margin: 10px 0;
+
+
 }
+
+#listPage .card {
+    cursor:pointer;
+}
+
+
+#listPage .card:hover {
+    background-color: #c05a88;
+    color:violet;
+
+}
+
 
 #cardDescription{
     margin-top: 5px; 

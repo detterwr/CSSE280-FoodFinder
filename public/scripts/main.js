@@ -61,6 +61,14 @@ rhit.ListPageController = class {
 			document.querySelector("#searchcontent").value = "";
 		}); 
 
+		document.querySelector("#searchcontent").addEventListener("keypress", (event) => {
+			if(event.key === 'Enter'){
+			const ser = document.querySelector("#searchcontent").value;
+			document.querySelector("#searchcontent").value = "";
+			window.location.href = `/list.html?search=${ser}`;
+			}
+		}); 
+
 		document.querySelector("#searchbutton").addEventListener("click", (event) => {
 			const ser = document.querySelector("#searchcontent").value;
 			document.querySelector("#searchcontent").value = "";
