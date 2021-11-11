@@ -217,8 +217,11 @@ rhit.FbRestaurantsManager = class {
 		}
 		if (this._search) {
 			// query = query.where(rhit.FB_KEY_AUTHOR, "==", this._uid);
+			// console.log(this._search.toUpperCase());
+			// console.log(this._search.toLowerCase());
 			query = query.where(rhit.FB_KEY_TITLE, ">=", this._search.toUpperCase())
-			.where(rhit.FB_KEY_TITLE, "<=", this._search.toLowerCase() + "\uf8ff");
+			.where(rhit.FB_KEY_TITLE, "<=", this._search.toLowerCase() + "\uf8ff").orderBy("title", "asc");
+			// .where(rhit.FB_KEY_TITLE, "<=", this._search.toLowerCase() );
 		 } 
 		this._unsubscribe = query.onSnapshot((querySnapshot) => {
 				console.log("Restaurant update!");
@@ -521,7 +524,8 @@ rhit.initializePage = function(){
 		const uid = urlParams.get("uid");
 		const category = urlParams.get("category");
 		const price = urlParams.get("price");
-		const search = urlParams.get("search")
+		const search = urlParams.get("search");
+		// search.replace("%20",' ');
 		rhit.RestaurantsManager = new rhit.FbRestaurantsManager(uid, category, price, search);
 		new rhit.ListPageController();
 		//document.querySelector("#searchcontent").value = "Search";
