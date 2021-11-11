@@ -229,6 +229,27 @@ input{
     color:white;
 }
 
+#cardMenuLink {
+    border-color: #2196F3;
+    color: dodgerblue;
+    border-radius: 10px;
+}
+
+#cardMenuLink:hover {
+    background: #2196F3;
+    color: white;
+}
+
+#cardLocationLink {
+    border-color: #04AA6D;
+    color: green;
+    border-radius: 10px;
+}
+  
+#cardLocationLink:hover {
+    background-color: #04AA6D;
+    color: white;
+}
 
 
 img {
